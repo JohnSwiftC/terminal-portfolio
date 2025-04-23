@@ -1,4 +1,7 @@
 import ProgramWindow from "./ProgramWindow";
+
+import High5Page from "./High5Page";
+
 import { useState, useEffect, useRef } from 'react';
 
 // The TextEditor component for our "edit" command
@@ -37,7 +40,7 @@ const TextEditor = ({ initialText = '', onSave }) => {
   // Main Terminal Component
   const Terminal = () => {
     const [history, setHistory] = useState([
-      { text: 'Welcome to ReactTerminal v1.0.0', type: 'system' },
+      { text: 'John Swift, Cybersecurity Developer', type: 'system' },
       { text: 'Type "help" for available commands', type: 'system' },
     ]);
     const [input, setInput] = useState('');
@@ -48,10 +51,17 @@ const TextEditor = ({ initialText = '', onSave }) => {
     const outputRef = useRef(null);
     const inputRef = useRef(null);
     const bottomRef = useRef(null);
+
+    // Maps passwords to a set of hidden files. These hidden files are added to the fake filesystem when the password is entered, and the key is then deleted.
+    const [passwords, setPasswords] = useState({
+      'ILoveCats240': {
+        'high5.html': <High5Page />
+      },
+    });
     
     // Virtual filesystem
     const [files, setFiles] = useState({
-      'readme.txt': 'Welcome to the terminal.\nThis is a simple virtual filesystem.\nYou can create, edit, and view files.',
+      'secrets.env': '"Having a good day guys! Hope I don\'t push the secrets to the public repo and then quickly try to delete it!" -Someone at high5.id, probably.\nSecure password: ILoveCats240',
       'todo.txt': '1. Learn React\n2. Build cool projects\n3. Share with others',
     });
     
@@ -74,6 +84,24 @@ const TextEditor = ({ initialText = '', onSave }) => {
         }, 0);
       }
     };
+
+    const writeError = (text) => {
+      setHistory(prev => [
+        ...prev,
+        { text: text, type: "error" }
+      ]);
+
+      return []
+    }
+
+    const writeSystem = (text) => {
+      setHistory(prev => [
+        ...prev,
+        { text: text, type: "system" }
+      ]);
+
+      return []
+    }
   
     // Available commands
     const commands = {
@@ -90,6 +118,8 @@ const TextEditor = ({ initialText = '', onSave }) => {
           '  edit [filename] - Edit file content',
           '  touch [filename] - Create new empty file',
           '  rm [filename] - Delete file',
+          '  login [password] - Reveal hidden files protected by this password',
+          '  browse [filename] - Browse HTML files to learn more!'
         ];
       },
       clear: () => {
@@ -103,15 +133,17 @@ const TextEditor = ({ initialText = '', onSave }) => {
         return [new Date().toString()];
       },
       whoami: () => {
-        return ['guest-user'];
+        return ['Hi! I\'m John Swift! I love cybersecurity, programming, and cats! I unfortunately can\'t tell you all my secrets, you\'ll just have to find them!'];
       },
       ls: () => {
         return Object.keys(files);
       },
       cat: (args) => {
         const filename = args[0];
-        if (!filename) return ['Error: No filename specified'];
-        if (!files[filename]) return [`Error: File '${filename}' not found`];
+
+        if (!filename) return writeError('Error: No filename specified')
+        if (!files[filename]) return writeError(`Error: File '${filename}' not found`)
+        if (filename.endsWith("html")) return writeError('Error: Open HTML with the browse command!');
         
         // Open a window with the file content
         setProgramWindow({
@@ -126,7 +158,8 @@ const TextEditor = ({ initialText = '', onSave }) => {
       },
       edit: (args) => {
         const filename = args[0];
-        if (!filename) return ['Error: No filename specified'];
+        if (!filename) return writeError("Error: No filename specified");
+        if (filename.endsWith("html")) return writeError("Error: Open HTML with the browse command");
         
         const fileContent = files[filename] || '';
         
@@ -153,8 +186,8 @@ const TextEditor = ({ initialText = '', onSave }) => {
       },
       touch: (args) => {
         const filename = args[0];
-        if (!filename) return ['Error: No filename specified'];
-        if (files[filename]) return [`File '${filename}' already exists`];
+        if (!filename) return writeError('Error: No filename specified');
+        if (files[filename]) return writeError(`File '${filename}' already exists`);
         
         setFiles(prev => ({
           ...prev,
@@ -165,8 +198,8 @@ const TextEditor = ({ initialText = '', onSave }) => {
       },
       rm: (args) => {
         const filename = args[0];
-        if (!filename) return ['Error: No filename specified'];
-        if (!files[filename]) return [`Error: File '${filename}' not found`];
+        if (!filename) return writeError('Error: No filename specified');
+        if (!files[filename]) return writeError(`Error: File '${filename}' not found`);
         
         setFiles(prev => {
           const newFiles = { ...prev };
@@ -175,6 +208,23 @@ const TextEditor = ({ initialText = '', onSave }) => {
         });
         
         return [`Deleted file '${filename}'`];
+      },
+      login: (args) => {
+        const new_files = passwords[args[0]];
+        if(!new_files) return writeError("Error: Password is incorrect or has already been used");
+
+        setFiles(prev => ({
+          ...prev,
+          ...passwords[args[0]]
+        }));
+
+        setPasswords(prev => {
+          const newPasswords = { ...prev };
+          delete newPasswords[args[0]];
+          return newPasswords;
+        });
+
+        return writeSystem(`Logged in with password ${args[0]}`);
       }
     };
   
