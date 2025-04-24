@@ -1,45 +1,13 @@
 import ProgramWindow from "./ProgramWindow";
 
-import High5Page from "./High5Page";
+import High5Page from "./ProgramWindowComps/High5Page";
+import FileViewer from "./ProgramWindowComps/FileViewer";
+import TextEditor from "./ProgramWindowComps/TextEditor";
 
 import { useState, useEffect, useRef } from 'react';
-
-// The TextEditor component for our "edit" command
-const TextEditor = ({ initialText = '', onSave }) => {
-    const [text, setText] = useState(initialText);
-    
-    return (
-      <div className="flex flex-col h-full">
-        <textarea
-          className="flex-1 w-full bg-white text-black p-2 font-mono resize-none outline-none border border-gray-700"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          autoFocus
-        />
-        <div className="mt-2 flex justify-end">
-          <button
-            className="bg-white hover:bg-blue-600 text-black px-3 py-1 border border-black"
-            onClick={() => onSave(text)}
-          >
-            Save
-          </button>
-        </div>
-      </div>
-    );
-  };
   
-  // The Viewer component for "cat" command
-  const FileViewer = ({ content }) => {
-    return (
-      <pre className="bg-gray-900 text-gray-200 p-3 font-mono overflow-auto h-full whitespace-pre-wrap">
-        {content}
-      </pre>
-    );
-  };
-  
-  // Main Terminal Component
   const Terminal = () => {
-    
+
     const componentDidMount = () => {
       this.focus();
     }

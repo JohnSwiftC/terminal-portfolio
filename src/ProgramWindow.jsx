@@ -85,7 +85,9 @@ const ProgramWindow = ({ title = "Program", content, isOpen, onClose, width = 50
               className="bg-red-500 hover:bg-red-600 text-white w-10 h-5 flex items-center justify-center border border-black"
               onClick={onClose}
             >
-              ×
+              <div className='mb-1'>
+                x
+              </div>
             </button>
           </div>
           
