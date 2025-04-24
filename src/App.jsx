@@ -13,7 +13,7 @@ function App() {
     <div>
       {showTitleCard && (
         <TitleCard 
-          title = "Welcome!"
+          title = "Welcome to GusOS"
           subtitle=""
           duration={3000}
         />
