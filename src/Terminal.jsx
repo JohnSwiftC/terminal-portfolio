@@ -39,6 +39,11 @@ const TextEditor = ({ initialText = '', onSave }) => {
   
   // Main Terminal Component
   const Terminal = () => {
+    
+    const componentDidMount = () => {
+      this.focus();
+    }
+
     const [history, setHistory] = useState([
       { text: 'John Swift, Cybersecurity Developer', type: 'system' },
       { text: 'Type "help" for available commands', type: 'system' },
