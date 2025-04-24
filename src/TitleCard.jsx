@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import "./styles.css"
 
-const TitleCard = ({ title, subtitle, duration = 3000, onComplete }) => {
+const TitleCard = ({ title, duration = 3000, onComplete }) => {
   const [visible, setVisible] = useState(true);
   const [opacity, setOpacity] = useState(1);
 
@@ -32,17 +33,33 @@ const TitleCard = ({ title, subtitle, duration = 3000, onComplete }) => {
 
   if (!visible) return null;
 
+  // Chars: ╔ ═ ╗ ╚ ╝
+
+  const boxWidth = title.length + 6;
+  
+  const topLine = `╔${"═".repeat(boxWidth)}╗`;
+  const emptyLine = `║${" ".repeat(boxWidth)}║`;
+  const titleLine = `║   ${title}   ║`;
+  const bottomLine = `╚${"═".repeat(boxWidth)}╝`;
+
   return (
     <div
-      className={`fixed inset-0 flex flex-col items-center justify-center bg-black z-50`}
+      className={`fixed inset-0 flex items-center justify-center bg-black z-50 text-blue-400`}
       style={{ opacity: opacity, transition: 'opacity 0.2s ease' }}
     >
-      <h1 className="text-blue-400">{title}</h1>
-      {subtitle && (
-        <h2 className="text-2xl text-gray-300 mt-4">
-          {subtitle}
-        </h2>
-      )}
+      <div className="fixed inset-0 flex flex-col items-center justify-center display-inline-block">
+        <pre className='leading-tight'>
+        {topLine}
+        <br></br>
+        {emptyLine}
+        <br></br>
+        {bottomLine}
+        </pre>
+      </div>
+      <div className="fixed inset-0 flex flex-col items-center justify-center">
+        {title}
+      </div>
+
     </div>
   );
 };
