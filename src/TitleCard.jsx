@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "./styles.css"
 
-const TitleCard = ({ title, duration = 3000, onComplete }) => {
+const TitleCard = ({ title, duration = 3000 }) => {
   const [visible, setVisible] = useState(true);
   const [opacity, setOpacity] = useState(1);
 
@@ -17,7 +17,6 @@ const TitleCard = ({ title, duration = 3000, onComplete }) => {
             // When fully transparent, set to not visible
             setTimeout(() => {
               setVisible(false);
-              if (onComplete) onComplete();
             }, 100);
             return 0;
           }
@@ -29,7 +28,7 @@ const TitleCard = ({ title, duration = 3000, onComplete }) => {
     return () => {
       clearTimeout(fadeTimer);
     };
-  }, [duration, onComplete]);
+  }, []);
 
   if (!visible) return null;
 
@@ -39,7 +38,6 @@ const TitleCard = ({ title, duration = 3000, onComplete }) => {
   
   const topLine = `╔${"═".repeat(boxWidth)}╗`;
   const emptyLine = `║${" ".repeat(boxWidth)}║`;
-  const titleLine = `║   ${title}   ║`;
   const bottomLine = `╚${"═".repeat(boxWidth)}╝`;
 
   return (
