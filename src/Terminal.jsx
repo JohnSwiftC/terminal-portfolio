@@ -198,6 +198,22 @@ import { useState, useEffect, useRef } from 'react';
         });
 
         return writeSystem(`Logged in with password ${args[0]}`);
+      },
+      browse: (args) => {
+        const file = args[0];
+        if (!file) return writeError(`Error: No filename specified`);
+        if (!files[file]) return writeError(`Error: File '${file}' not found`);
+        if (!file.endsWith("html")) return writeError("Error: The browse command can only be used for HTML files")
+
+        setProgramWindow({
+          isOpen: true,
+          title: `Browse: ${file}`,
+          content: files[file],
+          width: 1000,
+          height: 800,
+        });
+
+        return [`Browsing '${file}'`]
       }
     };
   
