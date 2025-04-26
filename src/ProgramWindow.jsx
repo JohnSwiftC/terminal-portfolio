@@ -135,7 +135,7 @@ const ProgramWindow = ({ title = "Program", content, isOpen, onClose, width = 50
           />
         </div>
         <div
-          className="text-gray-200 p-3 font-mono italic overflow-auto text-xs absolute bottom-0 right-0"
+          className="text-gray-200 font-mono italic overflow-hidden text-xs absolute bottom-0 right-0"
           style={{
               left: `${position.x + size.width - 150}px`,
               top: `${position.y + size.height + 30}px`,
