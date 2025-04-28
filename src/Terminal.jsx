@@ -3,6 +3,7 @@ import ProgramWindow from "./ProgramWindow";
 import High5Page from "./ProgramWindowComps/High5Page";
 import FileViewer from "./ProgramWindowComps/FileViewer";
 import TextEditor from "./ProgramWindowComps/TextEditor";
+import AboutMe from "./ProgramWindowComps/AboutMe";
 
 import { useState, useEffect, useRef } from 'react';
   
@@ -28,7 +29,8 @@ import { useState, useEffect, useRef } from 'react';
     // Maps passwords to a set of hidden files. These hidden files are added to the fake filesystem when the password is entered, and the key is then deleted.
     const [passwords, setPasswords] = useState({
       'ILoveCats240': {
-        'high5.html': <High5Page />
+        'high5.html': <High5Page />,
+        'aboutme.html': <AboutMe />
       },
     });
     
