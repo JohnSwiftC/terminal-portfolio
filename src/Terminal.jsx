@@ -116,6 +116,8 @@ import { useState, useEffect, useRef } from 'react';
       cat: (args) => {
         const filename = args[0];
 
+        if (filename.length > 16) return writeError("Error: Seg fault")
+
         if (!filename) return writeError('Error: No filename specified')
         if (!files[filename]) return writeError(`Error: File '${filename}' not found`)
         if (filename.endsWith("html")) return writeError('Error: Open HTML with the browse command!');
